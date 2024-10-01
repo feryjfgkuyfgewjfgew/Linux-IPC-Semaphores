@@ -118,11 +118,11 @@ if(NUM_LOOPS>=10)    {
 
 ## OUTPUT
 $ ./sem.o 
-![alt text](image.png)
+![Screenshot 2024-10-01 084441](https://github.com/user-attachments/assets/5bc9d2f0-c9d1-4d24-b01e-3e0d18693326)
 
-$ ipcs
 
-![alt text](image-1.png)
+![image](https://github.com/user-attachments/assets/e0e370bb-1bf3-4bc0-bf9b-51953a19caaf)
+
 
 # RESULT:
 The program is executed successfully.
