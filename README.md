@@ -19,14 +19,17 @@ Write the C Program using Linux Process API - Sempahores
 Execute the C Program for the desired output. 
 
 # PROGRAM:
+NAME: NARESH.R
+
+Registration:212223240104
+
 
 ## Write a C program that implements a producer-consumer system with two processes using Semaphores.
-## naresh.r
-## 212223240104
 ```
 /*
- * sem.c  - demonstrates a basic producer-consumer
- *                            implementation.              */
+ * sem-producer-consumer.c  - demonstrates a basic producer-consumer
+ *                            implementation.
+ */
 #include <stdio.h>	 /* standard I/O routines.              */
 #include <stdlib.h>      /* rand() and srand() functions        */
 #include <unistd.h>	 /* fork(), etc.                        */
@@ -39,7 +42,6 @@ Execute the C Program for the desired output.
 /* union semun is defined by including <sys/sem.h> */
 #else
 /* according to X/OPEN we have to define it ourselves */
-
 union semun {
         int val;                    /* value for SETVAL */
         struct semid_ds *buf;       /* buffer for IPC_STAT, IPC_SET */
@@ -56,12 +58,12 @@ int main(int argc, char* argv[])
     struct sembuf sem_op;     /* structure for semaphore ops.   */
     int rc;		      /* return value of system calls.  */
     struct timespec delay;    /* used for wasting time.         */
-/* create a private semaphore set with one semaphore in it, */
+	/* create a private semaphore set with one semaphore in it, */
     /* with access only to the owner.                           */
     sem_set_id = semget(IPC_PRIVATE, 1, 0600);
     if (sem_set_id == -1) {
-	perror("main: semget");
-	exit(1);
+	   perror("main: semget");
+	   exit(1);
     }
     printf("semaphore set created, semaphore set id '%d'.\n", sem_set_id);
     /* intialize the first (and single) semaphore in our set to '0'. */
@@ -70,10 +72,10 @@ int main(int argc, char* argv[])
     /* fork-off a child process, and start a producer/consumer job. */
     child_pid = fork();
     switch (child_pid) {
-	case -1:	/* fork() failed */
+	  case -1:	/* fork() failed */
 	    perror("fork");
 	    exit(1);
-case 0:		/* child process here */
+	 case 0:		/* child process here */
 	    for (i=0; i<NUM_LOOPS; i++) {
 		/* block on the semaphore, unless it's value is non-negative. */
 		sem_op.sem_num = 0;
@@ -84,15 +86,15 @@ case 0:		/* child process here */
 		fflush(stdout);
 	    }
 	    break;
-	default:	/* parent process here */
-	    for (i=0; i<NUM_LOOPS; i++) {
-		printf("producer: '%d'\n", i);
-		fflush(stdout);
-		/* increase the value of the semaphore by 1. */
-		sem_op.sem_num = 0;
-sem_op.sem_op = 1;
-		sem_op.sem_flg = 0;
-		semop(sem_set_id, &sem_op, 1);
+		default:	/* parent process here */
+			for (i=0; i<NUM_LOOPS; i++) {
+			printf("producer: '%d'\n", i);
+			fflush(stdout);
+			/* increase the value of the semaphore by 1. */
+			sem_op.sem_num = 0;
+	sem_op.sem_op = 1;
+			sem_op.sem_flg = 0;
+			semop(sem_set_id, &sem_op, 1);
 		/* pause execution for a little bit, to allow the */
 		/* child process to run and handle some requests. */
 		/* this is done about 25% of the time.            */
@@ -101,22 +103,26 @@ sem_op.sem_op = 1;
 	    	    delay.tv_nsec = 10;
 	    	    //nanosleep(&delay, NULL);
 		                      sleep(10); }
+			
 if(NUM_LOOPS>=10)    {
-	    semctl(sem_set_id, 0, IPC_RMID, sem_val) ;} // Remove the sem_set_id
-	    }}
+	    semctl(sem_set_id, 0, IPC_RMID, sem_val) ; // Remove the sem_set_id
+	    
 	    break;
-    }
+
+		}
+	}}
+    
     return 0;
 }
 ```
 
-
-
 ## OUTPUT
 $ ./sem.o 
-![output](<Screenshot 2024-09-27 052521.png>)
+![alt text](image.png)
 
 $ ipcs
-![output](<Screenshot 2024-09-27 052550.png>)
+
+![alt text](image-1.png)
+
 # RESULT:
 The program is executed successfully.
